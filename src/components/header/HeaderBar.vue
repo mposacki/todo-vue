@@ -25,10 +25,10 @@ export default {
   justify-content: flex-end;
 
   min-height: 40px;
-  background-image: url("../../assets/dark-red-background.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: repeat;
+  /*background-image: url("../../assets/dark-red-background.jpg");*/
+  /*background-position: center;*/
+  /*background-size: cover;*/
+  /*background-repeat: repeat;*/
   padding: 10px;
 }
 </style>

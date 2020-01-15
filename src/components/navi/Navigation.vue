@@ -52,7 +52,7 @@ export default {
   }
 
   &__link {
-    color: $light;
+    color: #000;
     text-decoration: none;
   }
 }
@@ -60,7 +60,7 @@ export default {
   background-color: transparent;
   border: none;
   font: inherit;
-  color: $light;
+  color: #000;
   cursor: pointer;
 }
 </style>
