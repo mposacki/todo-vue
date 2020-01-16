@@ -1,5 +1,5 @@
 <template>
-  <header class="header-bar">
+  <header class="header-bar" :style="[auth ? {'border-top-left-radius': '0', 'border-bottom-left-radius': '0'} : {'border-top-left-radius': '10px', 'border-bottom-left-radius': '10px'}]">
     <Logo />
     <Navigation />
   </header>
@@ -13,7 +13,12 @@ export default {
   components: {
     Navigation,
     Logo
-  }
+  },
+  computed: {
+      auth() {
+          return this.$store.getters.isAuthenticated;
+      }
+  },
 };
 </script>
 
@@ -25,10 +30,12 @@ export default {
   justify-content: flex-end;
 
   min-height: 40px;
-  /*background-image: url("../../assets/dark-red-background.jpg");*/
-  /*background-position: center;*/
-  /*background-size: cover;*/
-  /*background-repeat: repeat;*/
+  background-image: url("../../assets/dark-red-background.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
   padding: 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 </style>

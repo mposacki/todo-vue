@@ -23,6 +23,6 @@ export default {
 
 <style scoped lang="scss">
 .sidebar {
-  border-right: 1px solid #ccc;
+  /*border-right: 1px solid #ccc;*/
 }
 </style>

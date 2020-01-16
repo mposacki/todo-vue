@@ -52,7 +52,7 @@ export default {
   }
 
   &__link {
-    color: #000;
+    color: $light;
     text-decoration: none;
   }
 }

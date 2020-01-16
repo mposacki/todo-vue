@@ -2,7 +2,7 @@
   <div id="app" class="app">
     <div class="app-container">
       <Sidebar :isAuth="auth"/>
-      <div class="app-content">
+      <div class="app-content" :style="[auth ? {'border-top-left-radius': '0', 'border-bottom-left-radius': '0'} : {'border-top-left-radius': '12px', 'border-bottom-left-radius': '12px'}]">
         <HeaderBar />
         <router-view></router-view>
       </div>
@@ -46,22 +46,23 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  /*background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("./assets/background-main.jpg");*/
-  /*background-size: cover;*/
+  background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("./assets/background-main.jpg");
+  background-size: cover;
 }
 
 .app-container {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
-  border-radius: 10px;
   box-shadow: 0 0 20px 0 rgba(0,0,0,.75);
 }
 
 .app-content {
-  /*background: linear-gradient(0deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .45)), url("./assets/light-beige-background.jpg");*/
-  /*background-size: cover;*/
+  background: linear-gradient(0deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .45)), url("./assets/light-beige-background.jpg");
+  background-size: cover;
   height: 100%;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
   /*background-color: #f6f7fb;*/
 }
 
