@@ -1,22 +1,25 @@
 <template>
-  <header class="header-bar" :style="[auth ? {'border-top-left-radius': '0', 'border-bottom-left-radius': '0'} : {'border-top-left-radius': '10px', 'border-bottom-left-radius': '10px'}]">
-    <Logo />
+  <header class="header-bar" :style="[auth ? {'border-top-left-radius': '0'} : {'border-top-left-radius': '10px'}]">
+    <UserIcon v-if="auth" :user="getUser"/>
     <Navigation />
   </header>
 </template>
 
 <script>
 import Navigation from "../navi/Navigation";
-import Logo from "./Logo"
+import UserIcon from "../user/UserIcon";
 
 export default {
   components: {
     Navigation,
-    Logo
+    UserIcon
   },
   computed: {
       auth() {
           return this.$store.getters.isAuthenticated;
+      },
+      getUser() {
+          return this.$store.getters.user;
       }
   },
 };

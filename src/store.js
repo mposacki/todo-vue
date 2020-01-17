@@ -35,6 +35,7 @@ export default new Vuex.Store({
     signup({ commit, dispatch }, authData) {
       axios
         .post("/accounts:signUp?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc", {
+          name: authData.name,
           email: authData.email,
           password: authData.password,
           returnSecureToken: true
@@ -52,6 +53,7 @@ export default new Vuex.Store({
           localStorage.setItem("userId", res.data.localId);
           localStorage.setItem("expirationDate", expirationDate);
           dispatch("storeUser", authData);
+          dispatch("setUser", authData.email);
           dispatch("setLogoutTimer", res.data.expiresIn);
           router.replace("/");
         })
@@ -68,7 +70,7 @@ export default new Vuex.Store({
           }
         )
         .then(res => {
-          console.log(res);
+          console.log(res.data);
           commit("authUser", {
             token: res.data.idToken,
             userId: res.data.localId
@@ -80,6 +82,7 @@ export default new Vuex.Store({
           localStorage.setItem("token", res.data.idToken);
           localStorage.setItem("userId", res.data.localId);
           localStorage.setItem("expirationDate", expirationDate);
+          dispatch("setUser", authData.email);
           dispatch("setLogoutTimer", res.data.expiresIn);
           router.replace("/");
         })
@@ -112,30 +115,26 @@ export default new Vuex.Store({
       if (!state.idToken) {
         return;
       }
+      let userId = ''
       globalAxios
         .post("/users.json" + "?auth=" + state.idToken, userData)
-        .then(res => console.log(res))
-        .catch(error => console.log(error));
-    },
-    fetchUser({ commit, state }) {
-      if (!state.idToken) {
-        return;
-      }
-      globalAxios
-        .get("/users.json" + "?auth=" + state.idToken)
         .then(res => {
-          console.log(res);
-          const data = res.data;
-          const users = [];
-          for (let key in data) {
-            const user = data[key];
-            user.id = key;
-            users.push(user);
-          }
-          console.log(users);
-          commit("storeUser", users[0]);
+          userId = res.data.name;
         })
         .catch(error => console.log(error));
+    },
+    setUser({ commit, state }, email) {
+      globalAxios
+        .get('/users.json?orderBy="email"&equalTo="' + email + '"')
+          .then(function(res){
+            const userData = res.data[Object.keys(res.data)[0]];
+            const user =  {
+              name: userData.name ? userData.name : 'Guest',
+              email: userData.email,
+            };
+            commit('storeUser', user)
+          })
+          .catch(err => console.log(err));
     }
   },
   getters: {

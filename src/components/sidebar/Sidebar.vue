@@ -1,12 +1,13 @@
 <template>
   <div class="sidebar" v-if="isAuth">
-    <UserIcon />
-    <h1>Sidebar</h1>
+    <div class="sidebar__content">
+      <SidebarNavigation />
+    </div>
   </div>
 </template>
 
 <script>
-import UserIcon from "../user/UserIcon";
+import SidebarNavigation from "./SidebarNavigation";
 
 export default {
     props: {
@@ -16,13 +17,21 @@ export default {
         }
     },
     components: {
-        UserIcon
+        SidebarNavigation
     }
 }
 </script>
 
 <style scoped lang="scss">
 .sidebar {
-  /*border-right: 1px solid #ccc;*/
+  background: linear-gradient(0deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .45)), url("../../assets/light-beige-background.jpg");
+  background-size: cover;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right: 1px solid #ccc;
+
+  &__content {
+    padding: 10px;
+  }
 }
 </style>

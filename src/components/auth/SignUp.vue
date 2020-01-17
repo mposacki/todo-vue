@@ -2,6 +2,15 @@
   <div id="sign-up" class="sign-up">
     <div class="sign-up__heading">Sign Up!</div>
     <form @submit.prevent="onSubmit" class="sign-up-form">
+      <div class="input" :class="{ invalid: $v.name.$error }">
+        <label for="name">Name</label>
+        <input
+            type="text"
+            id="name"
+            @blur="$v.name.$touch()"
+            v-model="name"
+        />
+      </div>
       <div class="input" :class="{ invalid: $v.email.$error }">
         <label for="email">E-mail address</label>
         <input
@@ -55,10 +64,15 @@ export default {
       email: "",
       password: "",
       confirmPassword: "",
-      emailError: ""
+      emailError: "",
+      name: ""
     };
   },
   validations: {
+    name: {
+      required,
+      minLen: minLength(2)
+    },
     email: {
       required,
       email,
@@ -86,14 +100,11 @@ export default {
   methods: {
     onSubmit() {
       const formData = {
+        name: this.name,
         email: this.email,
         password: this.password
       };
       this.$store.dispatch("signup", formData);
-    },
-    emptyEmail($v) {
-        console.log(!$v.email.required && $v.email.$invalid && $v.email.required.$dirty)
-        return !$v.email.required && $v.email.$invalid && $v.email.required.$dirty
     }
   }
 };

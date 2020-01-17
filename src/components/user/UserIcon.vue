@@ -9,7 +9,7 @@ export default {
   props: {
     url: {
       type: String,
-      default: require("../../assets/user.svg")
+      default: require("../../assets/user-man.svg")
     },
     alt: {
       type: String,
@@ -25,16 +25,13 @@ export default {
 
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  border: 1px solid #000;
-  background-color: $light-beige;
 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .user-icon__image {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
 }
 </style>

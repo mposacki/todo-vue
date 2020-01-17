@@ -35,6 +35,7 @@ export default {
   padding-left: 10px;
   font-weight: 700;
   display: flex;
+  margin: 0;
 
   &__item {
     transition: background-color .3s ease-in-out;
@@ -60,7 +61,7 @@ export default {
   background-color: transparent;
   border: none;
   font: inherit;
-  color: #000;
+  color: $light;
   cursor: pointer;
 }
 </style>

@@ -41,6 +41,10 @@ body {
   background-color: #f1f2f7;
 }
 
+h1, h2, h3, p {
+  margin: 0 0 1rem 0;
+}
+
 .app {
   display: flex;
   align-items: center;
@@ -60,7 +64,6 @@ body {
 .app-content {
   background: linear-gradient(0deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .45)), url("./assets/light-beige-background.jpg");
   background-size: cover;
-  height: 100%;
   border-top-right-radius: 12px;
   border-bottom-right-radius: 12px;
   /*background-color: #f6f7fb;*/
