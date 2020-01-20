@@ -140,44 +140,55 @@ export default new Vuex.Store({
           .catch(err => console.log(err));
     },
     getTodos({ state }) {
-      // const todoAdd1 = {
-      //   "List test": [
-      //     {
-      //       name: "Create todo app",
-      //       status: "done"
-      //     },
-      //     {
-      //       name: "End the game",
-      //       status: "waiting"
-      //     }
-      //   ],
-      //   "List test 2": [
-      //     {
-      //       name: "Create todo app 2",
-      //       status: "waiting"
-      //     },
-      //     {
-      //       name: "End the game 2",
-      //       status: "done"
-      //     }
-      //   ],
-      //   "List test 3": [
-      //     {
-      //       name: "Create todo app 3",
-      //       status: "waiting"
-      //     },
-      //     {
-      //       name: "End the game 3",
-      //       status: "done"
-      //     }
-      //   ]
-      // }
+      const todoAdd1 = {
+        "List test": [
+          {
+            name: "Create todo app",
+            status: "done"
+          },
+          {
+            name: "End the game",
+            status: "waiting"
+          }
+        ],
+        "List test 2": [
+          {
+            name: "Create todo app 2",
+            status: "waiting"
+          },
+          {
+            name: "End the game 2",
+            status: "done"
+          }
+        ],
+        "List test 3": [
+          {
+            name: "Create todo app 3",
+            status: "waiting"
+          },
+          {
+            name: "End the game 3",
+            status: "done"
+          }
+        ]
+      }
+      const todo2 = {
+        name: "Create todo app",
+        status: "waiting"
+      }
       let userId = ''
       if (state.user) {
         userId = state.user.id;
       } else {
         userId = localStorage.getItem("user");
       }
+
+      globalAxios
+        .get("/todos/" + userId + ".json" + "?auth=" + state.idToken)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => console.log(error));
 
       // globalAxios
       //   .get("/todos/" + userId + ".json" + "?auth=" + state.idToken)
@@ -190,9 +201,12 @@ export default new Vuex.Store({
       //   .catch(error => console.log(error));
 
       // globalAxios
-      //   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todoAdd1)
-      //   .then()
-      //   .catch(error => console.log(error));
+      //   .post("/todos/" + userId + ".json" + "?auth=" + state.idToken, todoAdd1)
+      //   .then();
+      globalAxios
+        .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todoAdd1)
+        .then()
+        .catch(error => console.log(error));
 
       globalAxios
         .get("/todos/" + userId + ".json" + "?auth=" + state.idToken)
@@ -219,9 +233,6 @@ export default new Vuex.Store({
       //     console.log(res);
       //   })
       //   .catch(error => console.log(error));
-    },
-    getSingleTodoList() {
-
     }
   },
   getters: {

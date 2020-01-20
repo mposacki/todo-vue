@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  
+  created() {
+    console.log('Test');
+    this.$store.dispatch('createTodos');
+  }
 }
 </script>
 

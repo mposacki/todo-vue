@@ -140,88 +140,32 @@ export default new Vuex.Store({
           .catch(err => console.log(err));
     },
     getTodos({ state }) {
-      // const todoAdd1 = {
-      //   "List test": [
-      //     {
-      //       name: "Create todo app",
-      //       status: "done"
-      //     },
-      //     {
-      //       name: "End the game",
-      //       status: "waiting"
-      //     }
-      //   ],
-      //   "List test 2": [
-      //     {
-      //       name: "Create todo app 2",
-      //       status: "waiting"
-      //     },
-      //     {
-      //       name: "End the game 2",
-      //       status: "done"
-      //     }
-      //   ],
-      //   "List test 3": [
-      //     {
-      //       name: "Create todo app 3",
-      //       status: "waiting"
-      //     },
-      //     {
-      //       name: "End the game 3",
-      //       status: "done"
-      //     }
-      //   ]
-      // }
-      let userId = ''
-      if (state.user) {
-        userId = state.user.id;
-      } else {
-        userId = localStorage.getItem("user");
+      const todo = {
+        "1": {
+          name: "Create todo app",
+          status: "done"
+        },
+        "2": {
+          name: "End the game",
+          status: "waiting"
+        }
       }
-
+      if (state.user) {
+        console.log(state.user.id);
+      } else {
+        // const user = state.user ? state.user : localStorage.getItem("user");
+        console.log(localStorage.getItem("user"), state.idToken);
+      }
+      
       // globalAxios
-      //   .get("/todos/" + userId + ".json" + "?auth=" + state.idToken)
-      //   .then(res => {
-      //     for (let key in res.data) {
-      //       if (res.data[key].name)
-      //     }
-      //     res.data
-      //   })
-      //   .catch(error => console.log(error));
-
-      // globalAxios
-      //   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todoAdd1)
-      //   .then()
-      //   .catch(error => console.log(error));
-
-      globalAxios
-        .get("/todos/" + userId + ".json" + "?auth=" + state.idToken)
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(error => console.log(error));
-
-      // globalAxios
-      //   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todo2)
+      //   .patch("/todos/" + state.user.id + ".json" + "?auth=" + state.idToken, todo)
       //   .then(res => {
       //     console.log(res);
       //   })
       //   .catch(error => console.log(error));
-
       // globalAxios
-      //   .get('/todos/' + userId + '.json' + '?auth=' + state.idToken + '&orderBy="name"&equalTo="' + todo2.name + '"')
-      //   // .get('/todos/' + userId + '.json' + '?orderBy="email"&equalTo="' + todo2.name + '"')
+      //   .get("/todos.json" + "?auth=" + state.idToken + "&print=pretty")
       //   .then(res => console.log(res));
-
-      // globalAxios
-      //   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todo2)
-      //   .then(res => {
-      //     console.log(res);
-      //   })
-      //   .catch(error => console.log(error));
-    },
-    getSingleTodoList() {
-
     }
   },
   getters: {

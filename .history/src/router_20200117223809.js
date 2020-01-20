@@ -32,14 +32,7 @@ const routes = [
   },
   {
     path: "/todos",
-    component: Todos,
-    beforeEnter(to, from, next) {
-      if (store.state.idToken) {
-        next();
-      } else {
-        next("/signin");
-      }
-    }
+    component: Todos
   }
 ];
 
