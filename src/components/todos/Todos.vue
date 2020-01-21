@@ -1,25 +1,40 @@
 <template>
   <div class="todos">
-    <h1 v-if="todos.length > 0">Todos Lists</h1>
-    <div else>
-      <h1>Create Todo List</h1>
-      <button @click="createTodoList" class="todos__button">Create</button>
+    <div v-if="todos.length > 0">
+      <h1>Todo Lists</h1>
+      <div class="todos__list" v-for="(todo, index) in todos">
+        <SingleList :todo="todo" :id="index"/>
+      </div>
     </div>
+    <div v-else-if="todos.length <= 0">
+      <h1>Create Todo List</h1>
+    </div>
+    <button @click="createTodoList" class="todos__button">Create</button>
   </div>
 </template>
 
 <script>
+import SingleList from "./SingleList";
+
 export default {
   data() {
     return {
       todos: []
     }
   },
+  components: {
+    SingleList
+  },
   created() {
-    this.todos = this.$store.dispatch("getTodos")
+    this.$store.dispatch("getTodos")
+      .then(res => {
+          this.todos = res;
+          this.$store.dispatch('setUserTodoLists', res);
+      });
   },
   methods: {
     createTodoList() {
+      this.$store.dispatch("setTodos");
       this.$router.push('/todos/addList');
     }
   }
@@ -28,6 +43,8 @@ export default {
 
 <style scoped lang="scss">
 .todos {
+  padding: 10px;
+
   &__button {
     background: url("../../assets/dark-red-background.jpg") center;
     color: $light;
