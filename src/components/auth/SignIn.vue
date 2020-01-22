@@ -11,7 +11,7 @@
         <input type="password" id="password" v-model="password" />
       </div>
       <div class="submit">
-        <button type="submit" class="sign-in__submit">Sign In</button>
+        <button type="submit" class="btn btn__submit">Sign In</button>
       </div>
     </form>
   </div>
@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .sign-in {
   width: 300px;
   margin: 0 auto;
@@ -53,7 +53,9 @@ export default {
     font-weight: 700;
     text-align: center;
   }
+}
 
+.btn {
   &__submit {
     background: url("../../assets/dark-red-background.jpg") center;
     color: $light;

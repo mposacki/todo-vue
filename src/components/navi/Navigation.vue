@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .navi {
   list-style-type: none;
   padding-left: 10px;

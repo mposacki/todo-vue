@@ -11,6 +11,13 @@
             v-model="name"
         />
       </div>
+      <div class="input">
+        <label for="sex">Sex</label>
+        <select id="sex" v-model="sex">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
       <div class="input" :class="{ invalid: $v.email.$error }">
         <label for="email">E-mail address</label>
         <input
@@ -48,7 +55,7 @@
         />
       </div>
       <div class="submit">
-        <button type="submit" class="sign-up__submit">Submit</button>
+        <button type="submit" class="btn btn__submit">Submit</button>
       </div>
     </form>
   </div>
@@ -65,7 +72,8 @@ export default {
       password: "",
       confirmPassword: "",
       emailError: "",
-      name: ""
+      name: "",
+      sex: "male",
     };
   },
   validations: {
@@ -101,6 +109,7 @@ export default {
     onSubmit() {
       const formData = {
         name: this.name,
+        sex: this.sex,
         email: this.email,
         password: this.password
       };
@@ -110,7 +119,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .sign-up {
   width: 300px;
   margin: 0 auto;
@@ -124,36 +133,13 @@ export default {
     text-align: center;
   }
 
-  &__submit {
-    background: url("../../assets/dark-red-background.jpg") center;
-    color: $light;
-    font-weight: 700;
-    border: none;
-    border-radius: $border-radius;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background .3s ease-in-out;
-
-    &:hover {
-      background: linear-gradient(0deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .15)), url("../../assets/dark-red-background.jpg") center;
-    }
-
-    &:focus,
-    &:active {
-      outline: none;
-      background: linear-gradient(0deg, rgba(0, 0, 0, .15), rgba(0, 0, 0, .15)), url("../../assets/dark-red-background.jpg") center;
-    }
-  }
-
   &__error {
     color: $red-light;
     font-size: 14px;
     line-height: 1.2;
   }
 }
-</style>
 
-<style lang="scss">
 .input {
   margin: 10px auto;
 
@@ -175,6 +161,15 @@ export default {
       border: 1px solid darken(#ccc, 20%);
       background-color: darken($light, 5%);
     }
+  }
+
+  & select {
+    font: inherit;
+    width: 100%;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: $border-radius / 2;
   }
 
   &.invalid {

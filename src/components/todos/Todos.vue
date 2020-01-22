@@ -1,15 +1,15 @@
 <template>
   <div class="todos">
-    <div v-if="todos.length > 0">
-      <h1>Todo Lists</h1>
-      <div class="todos__list" v-for="(todo, index) in todos">
+    <div v-if="todoLists.length">
+      <h2>Todo Lists</h2>
+      <div class="todos__list" v-for="(todo, index) in todoLists">
         <SingleList :todo="todo" :id="index"/>
       </div>
     </div>
-    <div v-else-if="todos.length <= 0">
-      <h1>Create Todo List</h1>
+    <div v-else>
+      <h2>Create Todo List</h2>
     </div>
-    <button @click="createTodoList" class="todos__button">Create</button>
+    <router-link :to="{ path: '/todos/addList', name: 'addTodoList' }" tag="button" class="btn btn__submit todos__button">Create</router-link>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ import SingleList from "./SingleList";
 export default {
   data() {
     return {
-      todos: []
+      todoLists: []
     }
   },
   components: {
@@ -28,20 +28,16 @@ export default {
   created() {
     this.$store.dispatch("getTodos")
       .then(res => {
-          this.todos = res;
+        if (res !== null) {
+          this.todoLists = res;
           this.$store.dispatch('setUserTodoLists', res);
-      });
-  },
-  methods: {
-    createTodoList() {
-      this.$store.dispatch("setTodos");
-      this.$router.push('/todos/addList');
-    }
+        }
+    });
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .todos {
   padding: 10px;
 

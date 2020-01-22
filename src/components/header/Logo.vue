@@ -7,16 +7,16 @@
 </template>
 
 <script>
-  export default {
-      computed: {
-          auth() {
-              return this.$store.getters.isAuthenticated
-          }
-      },
-  }
+export default {
+  computed: {
+    auth() {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .logo {
   width: 40px;
   height: 40px;

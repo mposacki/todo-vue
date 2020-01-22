@@ -4,40 +4,38 @@
     <div v-for="item in getList">
       <div class="single-todo">
         <p class="single-todo__name">{{ item.name }}</p>
-        <span :class="[item.status ? 'single-todo__status--done' : 'single-todo__status--waiting']" class="single-todo__status"></span>
+        <span :class="[item.status ? 'single-todo__status--done' : 'single-todo__status--waiting']"
+              class="single-todo__status"/>
       </div>
+    </div>
+    <div class="submit">
+      <router-link to="/todos" tag="button" class="btn btn__submit">Return</router-link>
     </div>
   </div>
 </template>
 
 <script>
-    import TodoStatus from "./TodoStatus";
-
-    export default {
-        data() {
-            return  {
-                list: {}
-            }
-        },
-        components: {
-            TodoStatus
-        },
-        created() {
-            this.list = this.$store.state.userTodos[this.$route.params.id - 1];
-        },
-        computed: {
-            getName() {
-                return Object.keys(this.list)[0]
-            },
-            getList() {
-                return Object.values(this.list)[0]
-            }
-        }
+export default {
+  data() {
+    return  {
+      list: {}
     }
-
+  },
+  created() {
+    this.list = this.$store.state.userTodos[this.$route.params.id - 1];
+  },
+  computed: {
+    getName() {
+      return Object.keys(this.list)[0]
+    },
+    getList() {
+      return Object.values(this.list)[0]
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .single-todo {
     display: flex;
     flex-direction: row;

@@ -10,6 +10,7 @@ import Todos from "./components/todos/Todos";
 import AddList from "./components/todos/AddList";
 import ShowList from "./components/todos/ShowList";
 import EditList from "./components/todos/EditList";
+import UserProfile from "./components/user/UserProfile";
 
 Vue.use(VueRouter);
 
@@ -53,8 +54,14 @@ const routes = [
     component: EditList
   },
   {
+    name: "addTodoList",
     path: "/todos/addList",
     component: AddList
+  },
+  {
+    name: "UserProfile",
+    path: "/user-profile",
+    component: UserProfile
   }
 ];
 

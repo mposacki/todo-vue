@@ -11,7 +11,12 @@ export default new Vuex.Store({
   state: {
     idToken: null,
     userId: null,
-    user: null,
+    user: {
+      name: '',
+      sex: 'male',
+      email: '',
+      password: ''
+    },
     userTodos: []
   },
   mutations: {
@@ -31,7 +36,17 @@ export default new Vuex.Store({
       state.userTodos = lists;
     },
     clearUserLists(state) {
-      state.userTodos = ''
+      state.userTodos = []
+    },
+    updateSingleList(state, listObj) {
+      console.log(state.userTodos[listObj.id]);
+      state.userTodos[listObj.id] = listObj.list;
+    },
+    removeSingleList(state, index) {
+      state.userTodos.splice(index, 1);
+    },
+    createSingleList(state, list) {
+      state.userTodos.push(list);
     }
   },
   actions: {
@@ -44,11 +59,13 @@ export default new Vuex.Store({
       axios
         .post("/accounts:signUp?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc", {
           name: authData.name,
+          sex: authData.sex,
           email: authData.email,
           password: authData.password,
           returnSecureToken: true
         })
         .then(res => {
+          console.log(res);
           commit("authUser", {
             token: res.data.idToken,
             userId: res.data.localId
@@ -78,7 +95,6 @@ export default new Vuex.Store({
           }
         )
         .then(res => {
-          console.log(res.data);
           commit("authUser", {
             token: res.data.idToken,
             userId: res.data.localId
@@ -110,7 +126,6 @@ export default new Vuex.Store({
       axios
         .post("/accounts:lookup?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc", { 'idToken': token })
         .then(res => {
-          console.log('User data:', res.data);
           for (let user of res.data.users) {
             if (user.localId === userId) {
               dispatch("setUser", user.email);
@@ -136,10 +151,11 @@ export default new Vuex.Store({
       if (!state.idToken) {
         return;
       }
-      let userId = ''
+      let userId = '';
       globalAxios
         .post("/users.json" + "?auth=" + state.idToken, userData)
         .then(res => {
+          console.log(res.data.name);
           userId = res.data.name;
         })
         .catch(error => console.log(error));
@@ -153,15 +169,22 @@ export default new Vuex.Store({
               id: Object.keys(res.data)[0],
               name: userData.name ? userData.name : 'Guest',
               email: userData.email,
+              sex: userData.sex
             };
             localStorage.setItem("user", user.id);
             commit('storeUser', user);
           })
           .catch(err => console.log(err));
     },
+    updateUserProfile({state}, userData) {
+      console.log(userData);
+    },
     getTodos({ state, getters }) {
+      if (state.userTodos.length > 0) {
+        return Promise.resolve(state.userTodos)
+      }
       return globalAxios
-        .get("/todos/" + getters.userId + ".json" + "?auth=" + state.idToken)
+        .get("/todos/" + getters.userIdentifier + ".json" + "?auth=" + state.idToken)
         .then(res => {
           return res.data
         })
@@ -207,7 +230,7 @@ export default new Vuex.Store({
         }
       ];
       globalAxios
-          .put("/todos/" + getters.userId + ".json" + "?auth=" + state.idToken, lists)
+          .put("/todos/" + getters.userIdentifier + ".json" + "?auth=" + state.idToken, lists)
           .then(res => {
             console.log(res.data)
           })
@@ -216,9 +239,35 @@ export default new Vuex.Store({
     setUserTodoLists({ commit, dispatch }, lists) {
       commit("setUserLists", lists);
     },
-    updateSingleList({commit, dispatch}, listObj) {
-      console.log(listObj)
+    updateSingleList({ state, commit, getters }, listObj) {
+      globalAxios
+          .put("/todos/" + getters.userIdentifier + "/" + listObj.id + ".json" + "?auth=" + state.idToken, listObj.list)
+          .then(res => {
+            commit("updateSingleList", listObj);
+            router.replace("/todos");
+          })
+          .catch(error => console.log(error));
+    },
+    removeSingleList({ state, commit, getters }, index) {
+      globalAxios
+          .delete("/todos/" + getters.userIdentifier + "/" + index + ".json" + "?auth=" + state.idToken)
+          .then(res => {
+            commit('removeSingleList', index);
+          })
+          .catch(error => console.log(error));
+    },
+    createSingleList({ state, commit, getters }, list) {
+      globalAxios
+          .put("/todos/" + getters.userIdentifier + "/" + getters.userTodosLength + ".json" + "?auth=" + state.idToken, list)
+          .then(res => {
+            commit('createSingleList', list);
+            router.replace("/todos");
+          })
+          .catch(error => console.log(error));
     }
+  },
+  $touch () {
+    validator.$v.$touch()
   },
   getters: {
     user(state) {
@@ -230,7 +279,10 @@ export default new Vuex.Store({
     userTodos(state) {
       return state.userTodos;
     },
-    userId(state) {
+    userTodosLength(state) {
+      return state.userTodos.length;
+    },
+    userIdentifier(state) {
       let userId = ''
       if (state.user) {
         userId = state.user.id;
@@ -238,77 +290,9 @@ export default new Vuex.Store({
         userId = localStorage.getItem("user");
       }
       return userId;
+    },
+    $v (state) {
+      return Object.assign({}, validator.$v)
     }
   }
 });
-
-
-
-
-// const todoAdd1 = {
-//   "List test": [
-//     {
-//       name: "Create todo app",
-//       status: true
-//     },
-//     {
-//       name: "End the game",
-//       status: false
-//     }
-//   ],
-//   "List test 2": [
-//     {
-//       name: "Create todo app 2",
-//       status: false
-//     },
-//     {
-//       name: "End the game 2",
-//       status: true
-//     }
-//   ],
-//   "List test 3": [
-//     {
-//       name: "Create todo app 3",
-//       status: false
-//     },
-//     {
-//       name: "End the game 3",
-//       status: true
-//     }
-//   ]
-// }
-
-
-
-// globalAxios
-//   .get("/todos/" + userId + ".json" + "?auth=" + state.idToken)
-//   .then(res => {
-//     for (let key in res.data) {
-//       if (res.data[key].name)
-//     }
-//     res.data
-//   })
-//   .catch(error => console.log(error));
-
-// globalAxios
-//   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todoAdd1)
-//   .then()
-//   .catch(error => console.log(error));
-// globalAxios
-//   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todo2)
-//   .then(res => {
-//     console.log(res);
-//   })
-//   .catch(error => console.log(error));
-
-// globalAxios
-//   .get('/todos/' + userId + '.json' + '?auth=' + state.idToken + '&orderBy="name"&equalTo="' + todo2.name + '"')
-//   // .get('/todos/' + userId + '.json' + '?orderBy="email"&equalTo="' + todo2.name + '"')
-//   .then(res => console.log(res));
-
-// globalAxios
-//   .patch("/todos/" + userId + ".json" + "?auth=" + state.idToken, todo2)
-//   .then(res => {
-//     console.log(res);
-//   })
-//   .catch(error => console.log(error));

@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <h1>Welcome to the dashboard!</h1>
+    <h2>Welcome to the dashboard!</h2>
+    <p>Check you'r todo lists or edit user profile </p>
   </div>
 </template>
 
@@ -10,7 +11,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .home {
     padding: 10px;
   }

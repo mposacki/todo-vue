@@ -52,6 +52,8 @@ h1, h2, h3, p {
   min-height: 100vh;
   background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("./assets/background-main.jpg");
   background-size: cover;
+  position: relative;
+  z-index: 10;
 }
 
 .app-container {

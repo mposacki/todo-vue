@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .sidebar {
   background: linear-gradient(0deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .45)), url("../../assets/light-beige-background.jpg");
   background-size: cover;
