@@ -6,13 +6,14 @@
         <input
           type="text"
           id="name"
-          @blur="$v.name.$touch()"
-          v-model="user.name"
+          @blur="updateField('name', $event)"
+          :value="name"
         />
+        {{$v.name}}
       </div>
       <div class="input">
         <label for="sex">Sex</label>
-        <select id="sex" v-model="user.sex">
+        <select id="sex" :value="sex" @change="updateField('sex', $event)">
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
@@ -22,9 +23,10 @@
         <input
           type="email"
           id="email"
-          @blur="$v.email.$touch()"
-          v-model="user.email"
+          @blur="updateField('email', $event)"
+          :value="email"
         />
+        {{$v.email}}
         <p class="sign-up__error" v-if="!$v.email.email">
           Please provide a valid email address.
         </p>
@@ -38,24 +40,33 @@
       <div class="submit">
         <button type="submit" class="btn btn__submit" @click="updateUserProfile">Submit</button>
       </div>
+      {{getUserEmail}}
     </form>
   </div>
 </template>
 
 <script>
-    import {required, email, minLength, sameAs} from "vuelidate/lib/validators";
+    import {required, email, minLength} from "vuelidate/lib/validators";
     import axios from "axios";
-    import {mapState} from "vuex";
+    import {mapState, mapGetters} from "vuex";
 
     export default {
         data() {
             return {
-                emailError: ''
+                emailError: '',
+                tmpEmail: ''
             }
         },
-        computed: mapState({
-            user: state => state.user
-        }),
+        computed: {
+            ...mapState({
+                email: state => state.user.email,
+                sex: state => state.user.sex,
+                name: state => state.user.name,
+            }),
+            getUserEmail() {
+                return this.tmpEmail = this.$store.state.user.email;
+            }
+        },
         validations: {
             name: {
                 required,
@@ -70,22 +81,28 @@
                     return axios
                         .get('/users.json?orderBy="email"&equalTo="' + val + '"')
                         .then(function (res) {
-                            vm.emailError = Object.keys(res.data).length === 0 ? "" : "This email are existing. Please provide another email."
-                            return Object.keys(res.data).length === 0;
+                            if (Object.keys(res.data).length === 0) {
+                                vm.emailError = "";
+                                return true;
+                            }
+                            vm.emailError = Object.values(res.data)[0].email === vm.tmpEmail ? "" : "This email are existing. Please provide another email.";
+                            return Object.values(res.data)[0].email === vm.tmpEmail;
                         });
                 }
-            },
-            password: {
-                required,
-                minLen: minLength(6)
-            },
-            confirmPassword: {
-                sameAs: sameAs(vm => {
-                    return vm.password;
-                })
             }
         },
         methods: {
+            updateField(field, e) {
+                console.log(field, e.target.value, this.tmpEmail);
+                console.log(field === 'email', this.tmpEmail === e.target.value, field === 'email' && this.tmpEmail === e.target.value);
+                // if ( field !== 'email' && this.userEmail !== e.target.value ) {
+                this.$store.commit("updateField", {
+                    fieldName: field,
+                    value: e.target.value
+                });
+                // }
+                this.$v[field].$touch();
+            },
             updateUserProfile() {
                 const formData = {
                     name: this.name,

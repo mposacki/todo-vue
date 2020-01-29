@@ -13,7 +13,8 @@
       <div v-for="(item, index) in list">
         <div class="edit-single-todo">
           <p class="edit-single-todo__name">{{ item.name }}</p>
-          <span :class="[item.status ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']" class="edit-single-todo__status"
+          <span :class="[item.status ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']"
+                class="edit-single-todo__status"
                 @click="item.status = !item.status"/>
           <button @click="removeTodo(index)" class="edit-single-todo__remove">
             <img src="../../assets/delete.svg" alt="Delete icon" class="edit-single-todo__icon">
@@ -32,7 +33,8 @@
         </div>
         <div class="new-todo-form__form-control">
           <span>Status</span>
-          <span :class="[newTodoStatus ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']" class="edit-single-todo__status"
+          <span :class="[newTodoStatus ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']"
+                class="edit-single-todo__status"
                 @click="newTodoStatus = !newTodoStatus"/>
         </div>
         <div class="new-todo-form__add">
@@ -47,152 +49,153 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return  {
-      listName: '',
-      list: [],
-      newTodoName: '',
-      newTodoStatus: false
-    }
-  },
-  methods: {
-    createSingleList() {
-      this.$store.dispatch('createSingleList', {
-        [this.listName]: this.list
-      })
-    },
-    removeTodo(index) {
-      this.list.splice(index, 1);
-    },
-    addTodo() {
-      this.list.push({
-        name: this.newTodoName,
-        status: this.newTodoStatus
-      });
+    export default {
+        data() {
+            return {
+                listName: '',
+                list: [],
+                newTodoName: '',
+                newTodoStatus: false
+            }
+        },
+        methods: {
+            createSingleList() {
+                this.$store.dispatch('createSingleList', {
+                    [this.listName]: this.list
+                })
+            },
+            removeTodo(index) {
+                this.list.splice(index, 1);
+            },
+            addTodo() {
+                this.list.push({
+                    name: this.newTodoName,
+                    status: this.newTodoStatus
+                });
 
-      this.newTodoName = '';
-      this.newTodoStatus = false;
+                this.newTodoName = '';
+                this.newTodoStatus = false;
+            }
+        }
     }
-  }
-}
 </script>
 
 <style lang="scss">
-.new-todo-list {
-  padding: 10px;
+  .new-todo-list {
+    padding: 10px;
 
-  &-box {
-    margin-bottom: 10px;
-  }
+    &-box {
+      margin-bottom: 10px;
+    }
 
-  &__heading {
-    margin-bottom: 10px;
-    min-height: 24px;
-    border: none;
-    background: transparent;
-    color: #000;
-    font-size: 24px;
-    line-height: 1.2;
-
-    &::-webkit-input-placeholder,
-    &::-moz-placeholder {
+    &__heading {
+      margin-bottom: 10px;
+      min-height: 24px;
+      border: none;
+      background: transparent;
       color: #000;
       font-size: 24px;
       line-height: 1.2;
-      opacity: 1;
-    }
-  }
 
-  &__name {
-    color: #fff;
-    font-weight: 500;
-    margin-bottom: 0;
-    margin-right: auto;
-  }
-
-  &__status {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 0;
-    margin: 0;
-
-    line-height: 0;
-
-    width: 40px;
-    height: 40px;
-
-    border: none;
-    background: transparent;
-
-    &:after {
-      display: block;
-      font-weight: 500;
-    }
-
-    &--done {
-      &:after{
-        content: '\2713';
-
-        color: #00ff4e;
+      &::-webkit-input-placeholder,
+      &::-moz-placeholder {
+        color: #000;
         font-size: 24px;
+        line-height: 1.2;
+        opacity: 1;
       }
     }
-    &--waiting {
-      &:after{
-        content: '\00D7';
 
-        color: #ff1d17;
-        font-size: 40px;
-        margin-bottom: 2px;
+    &__name {
+      color: #fff;
+      font-weight: 500;
+      margin-bottom: 0;
+      margin-right: auto;
+    }
+
+    &__status {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 0;
+      margin: 0;
+
+      line-height: 0;
+
+      width: 40px;
+      height: 40px;
+
+      border: none;
+      background: transparent;
+
+      &:after {
+        display: block;
+        font-weight: 500;
+      }
+
+      &--done {
+        &:after {
+          content: '\2713';
+
+          color: #00ff4e;
+          font-size: 24px;
+        }
+      }
+
+      &--waiting {
+        &:after {
+          content: '\00D7';
+
+          color: #ff1d17;
+          font-size: 40px;
+          margin-bottom: 2px;
+        }
       }
     }
-  }
 
-  &__remove {
-    outline: none;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
+    &__remove {
+      outline: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
 
-  &__icon {
-    width: 24px;
-    height: 24px;
-  }
+    &__icon {
+      width: 24px;
+      height: 24px;
+    }
 
-  &__add,
-  &__heading{
-    flex-basis: 100%;
-  }
+    &__add,
+    &__heading {
+      flex-basis: 100%;
+    }
 
-  &__form-control {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
+    &__form-control {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
 
-    &:not(:first-of-type) {
-      margin-left: 10px;
+      &:not(:first-of-type) {
+        margin-left: 10px;
+      }
+    }
+
+    &__input-name {
+      margin-bottom: 10px;
+      min-height: 24px;
+      color: #000;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    &__input-todo-list-name {
+      margin-bottom: 10px;
+      min-height: 24px;
+      max-width: 300px;
+      color: #000;
+      font-size: 18px;
+      line-height: 1.2;
     }
   }
-
-  &__input-name {
-    margin-bottom: 10px;
-    min-height: 24px;
-    color: #000;
-    font-size: 18px;
-    line-height: 1.2;
-  }
-
-  &__input-todo-list-name {
-    margin-bottom: 10px;
-    min-height: 24px;
-    max-width: 300px;
-    color: #000;
-    font-size: 18px;
-    line-height: 1.2;
-  }
-}
 </style>

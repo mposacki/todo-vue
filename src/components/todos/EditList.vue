@@ -2,15 +2,16 @@
   <div class="edit-single-todo-box">
     <label for="listName">
       <input class="edit-single-todo__heading"
-          type="text"
-          id="listName"
-          v-model="listName"
+             type="text"
+             id="listName"
+             v-model="listName"
       />
     </label>
     <div v-for="(item, index) in list">
       <div class="edit-single-todo">
         <p class="edit-single-todo__name">{{ item.name }}</p>
-        <span :class="[item.status ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']" class="edit-single-todo__status"
+        <span :class="[item.status ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']"
+              class="edit-single-todo__status"
               @click="item.status = !item.status"/>
         <button @click="removeTodo(index)" class="edit-single-todo__remove">
           <img src="../../assets/delete.svg" alt="Delete icon" class="edit-single-todo__icon">
@@ -29,7 +30,8 @@
       </div>
       <div class="new-todo-form__form-control">
         <span>Status</span>
-        <span :class="[newTodoStatus ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']" class="edit-single-todo__status"
+        <span :class="[newTodoStatus ? 'edit-single-todo__status--done' : 'edit-single-todo__status--waiting']"
+              class="edit-single-todo__status"
               @click="newTodoStatus = !newTodoStatus"/>
       </div>
       <div class="new-todo-form__add">
@@ -43,44 +45,44 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return  {
-      listObject: {},
-      listName: '',
-      list: [],
-      newTodoName: '',
-      newTodoStatus: false
-    }
-  },
-  created() {
-    this.listObject = this.$store.state.userTodos[this.$route.params.id - 1];
-    this.listName = Object.keys(this.listObject)[0];
-    this.list = Object.values(this.listObject)[0];
-  },
-  methods: {
-    saveData() {
-      this.$store.dispatch('updateSingleList', {
-          id: this.$route.params.id - 1,
-          list: {
-              [this.listName]: this.list
-          }
-      })
-    },
-    removeTodo(index) {
-      this.list.splice(index, 1);
-    },
-    addTodo() {
-      this.list.push({
-        name: this.newTodoName,
-        status: this.newTodoStatus
-      });
+    export default {
+        data() {
+            return {
+                listObject: {},
+                listName: '',
+                list: [],
+                newTodoName: '',
+                newTodoStatus: false
+            }
+        },
+        created() {
+            this.listObject = this.$store.state.userTodos[this.$route.params.id - 1];
+            this.listName = Object.keys(this.listObject)[0];
+            this.list = Object.values(this.listObject)[0];
+        },
+        methods: {
+            saveData() {
+                this.$store.dispatch('updateSingleList', {
+                    id: this.$route.params.id - 1,
+                    list: {
+                        [this.listName]: this.list
+                    }
+                })
+            },
+            removeTodo(index) {
+                this.list.splice(index, 1);
+            },
+            addTodo() {
+                this.list.push({
+                    name: this.newTodoName,
+                    status: this.newTodoStatus
+                });
 
-      this.newTodoName = '';
-      this.newTodoStatus = false;
+                this.newTodoName = '';
+                this.newTodoStatus = false;
+            }
+        }
     }
-  }
-}
 </script>
 
 <style lang="scss">
@@ -148,15 +150,16 @@ export default {
       }
 
       &--done {
-        &:after{
+        &:after {
           content: '\2713';
 
           color: #00ff4e;
           font-size: 24px;
         }
       }
+
       &--waiting {
-        &:after{
+        &:after {
           content: '\00D7';
 
           color: #ff1d17;
@@ -190,7 +193,7 @@ export default {
     box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, .75);
 
     &__add,
-    &__heading{
+    &__heading {
       flex-basis: 100%;
     }
 

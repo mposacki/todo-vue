@@ -12,8 +12,8 @@ axios.defaults.baseURL = "https://vue-auth-2eea7.firebaseio.com/";
 axios.defaults.headers.get["Accepts"] = "application/json";
 
 new Vue({
-  el: "#app",
-  router,
-  store,
-  render: h => h(App)
+    el: "#app",
+    router,
+    store,
+    render: h => h(App)
 });
