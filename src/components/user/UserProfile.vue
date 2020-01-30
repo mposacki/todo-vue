@@ -40,7 +40,6 @@
       <div class="submit">
         <button type="submit" class="btn btn__submit" @click="updateUserProfile">Submit</button>
       </div>
-      {{getUserEmail}}
     </form>
   </div>
 </template>
@@ -48,24 +47,22 @@
 <script>
     import {required, email, minLength} from "vuelidate/lib/validators";
     import axios from "axios";
-    import {mapState, mapGetters} from "vuex";
+    import userAxios from "../../axios-auth";
+    import {mapState} from "vuex";
 
     export default {
         data() {
             return {
                 emailError: '',
-                tmpEmail: ''
+                templateEmail: ''
             }
         },
         computed: {
             ...mapState({
                 email: state => state.user.email,
                 sex: state => state.user.sex,
-                name: state => state.user.name,
+                name: state => state.user.name
             }),
-            getUserEmail() {
-                return this.tmpEmail = this.$store.state.user.email;
-            }
         },
         validations: {
             name: {
@@ -77,6 +74,14 @@
                 email,
                 unique: function (val) {
                     let vm = this;
+                    userAxios
+                        .post("/accounts:lookup?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc", {'idToken': vm.$store.state.idToken})
+                        .then(res => {
+                            for (let user of res.data.users) {
+                                vm.templateEmail = user.email;
+                            }
+                        })
+                        .catch(error => console.log(error));
                     if (val === "") return true;
                     return axios
                         .get('/users.json?orderBy="email"&equalTo="' + val + '"')
@@ -85,23 +90,25 @@
                                 vm.emailError = "";
                                 return true;
                             }
-                            vm.emailError = Object.values(res.data)[0].email === vm.tmpEmail ? "" : "This email are existing. Please provide another email.";
-                            return Object.values(res.data)[0].email === vm.tmpEmail;
+                            vm.emailError = Object.values(res.data)[0].email === vm.templateEmail ? "" : "This email are existing. Please provide another email.";
+                            return Object.values(res.data)[0].email === vm.templateEmail;
                         });
                 }
             }
         },
         methods: {
             updateField(field, e) {
-                console.log(field, e.target.value, this.tmpEmail);
-                console.log(field === 'email', this.tmpEmail === e.target.value, field === 'email' && this.tmpEmail === e.target.value);
-                // if ( field !== 'email' && this.userEmail !== e.target.value ) {
+                console.log(field, e.target.value, this.templateEmail);
+                console.log((field !== 'email'), (this.templateEmail !== e.target.value), (field !== 'email') === (this.templateEmail !== e.target.value));
+                // if ( (field !== 'email') === (this.templateEmail !== e.target.value) ) {
+                //   console.log('Update fielda');
                 this.$store.commit("updateField", {
                     fieldName: field,
                     value: e.target.value
                 });
                 // }
-                this.$v[field].$touch();
+                if (field !== 'sex') this.$v[field].$touch();
+
             },
             updateUserProfile() {
                 const formData = {

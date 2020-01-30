@@ -1,7 +1,7 @@
 <template>
   <div class="user">
-    <img :src="[ userData.sex === 'male' ? male : female ]" alt="User image" class="user__image"/>
-    <p class="user__name" v-if="userData.name">Hello {{ userData.name }}</p>
+    <img :src="[ sex === 'male' ? male : female ]" alt="User image" class="user__image"/>
+    <p class="user__name" v-if="name">Hello {{ name }}</p>
   </div>
 </template>
 
@@ -16,7 +16,8 @@
             }
         },
         computed: mapState({
-            userData: state => state.user
+            name: state => state.user.name,
+            sex: state => state.user.sex
         })
     };
 </script>

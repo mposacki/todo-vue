@@ -30,7 +30,12 @@ export default new Vuex.Store({
         clearAuthData(state) {
             state.idToken = null;
             state.userId = null;
-            state.user = null;
+            state.user = {
+                name: '',
+                sex: 'male',
+                email: '',
+                password: ''
+            };
         },
         setUserLists(state, lists) {
             state.userTodos = lists;
