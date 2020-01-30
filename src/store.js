@@ -44,7 +44,6 @@ export default new Vuex.Store({
             state.userTodos = []
         },
         updateSingleList(state, listObj) {
-            console.log(state.userTodos[listObj.id]);
             state.userTodos[listObj.id] = listObj.list;
         },
         removeSingleList(state, index) {
@@ -73,7 +72,6 @@ export default new Vuex.Store({
                     returnSecureToken: true
                 })
                 .then(res => {
-                    console.log(res);
                     commit("authUser", {
                         token: res.data.idToken,
                         userId: res.data.localId
@@ -163,9 +161,14 @@ export default new Vuex.Store({
             globalAxios
                 .post("/users.json" + "?auth=" + state.idToken, userData)
                 .then(res => {
-                    console.log(res.data.name);
                     userId = res.data.name;
                 })
+                .catch(error => console.log(error));
+        },
+        updateUser({ commit, state }, userData) {
+            globalAxios
+                .patch("/users/" + state.user.id + "/.json?auth=" + state.idToken, userData)
+                .then(res => {})
                 .catch(error => console.log(error));
         },
         setUser({commit, state}, email) {
@@ -184,8 +187,30 @@ export default new Vuex.Store({
                 })
                 .catch(err => console.log(err));
         },
-        updateUserProfile({state}, userData) {
-            console.log(userData);
+        updateUserProfile({state, commit, dispatch}, userData) {
+            axios
+                .post('/accounts:update?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc', {
+                    idToken: state.idToken,
+                    email: userData.email,
+                    returnSecureToken: true
+                })
+                .then(res => {
+                    if (res.data.idToken) {
+                        commit("authUser", {
+                            token: res.data.idToken,
+                            userId: res.data.localId
+                        });
+                        const now = new Date();
+                        const expirationDate = new Date(
+                            now.getTime() + res.data.expiresIn * 1000
+                        );
+                        localStorage.setItem("token", res.data.idToken);
+                        localStorage.setItem("userId", res.data.localId);
+                        localStorage.setItem("expirationDate", expirationDate);
+                        dispatch("setLogoutTimer", res.data.expiresIn);
+                    }
+                    dispatch("updateUser", userData);
+                })
         },
         updateField({state, commit}, fieldName, value) {
             commit('updateField', {
@@ -278,9 +303,6 @@ export default new Vuex.Store({
                     router.replace("/todos");
                 })
                 .catch(error => console.log(error));
-        },
-        name({commit}, value) {
-            commit('name', value)
         }
     },
     getters: {

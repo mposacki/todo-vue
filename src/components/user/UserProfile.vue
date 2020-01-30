@@ -9,7 +9,6 @@
           @blur="updateField('name', $event)"
           :value="name"
         />
-        {{$v.name}}
       </div>
       <div class="input">
         <label for="sex">Sex</label>
@@ -26,7 +25,6 @@
           @blur="updateField('email', $event)"
           :value="email"
         />
-        {{$v.email}}
         <p class="sign-up__error" v-if="!$v.email.email">
           Please provide a valid email address.
         </p>
@@ -38,7 +36,7 @@
         </p>
       </div>
       <div class="submit">
-        <button type="submit" class="btn btn__submit" @click="updateUserProfile">Submit</button>
+        <button type="submit" class="btn btn__submit">Submit</button>
       </div>
     </form>
   </div>
@@ -54,8 +52,24 @@
         data() {
             return {
                 emailError: '',
-                templateEmail: ''
+                templateEmail: '',
+                notSaved: false,
             }
+        },
+        created() {
+          userAxios
+            .post("/accounts:lookup?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc", {'idToken': this.$store.state.idToken})
+            .then(res => {
+                for (let user of res.data.users) {
+                    this.templateEmail = user.email;
+                }
+            })
+            .catch(error => console.log(error));
+        },
+        destroyed() {
+          if (!this.notSaved) {
+            this.$store.dispatch('setUser', this.templateEmail);
+          }
         },
         computed: {
             ...mapState({
@@ -74,14 +88,6 @@
                 email,
                 unique: function (val) {
                     let vm = this;
-                    userAxios
-                        .post("/accounts:lookup?key=AIzaSyDqDIUwP91okUZCVxo9DoTA4x8T5YHD3bc", {'idToken': vm.$store.state.idToken})
-                        .then(res => {
-                            for (let user of res.data.users) {
-                                vm.templateEmail = user.email;
-                            }
-                        })
-                        .catch(error => console.log(error));
                     if (val === "") return true;
                     return axios
                         .get('/users.json?orderBy="email"&equalTo="' + val + '"')
@@ -98,25 +104,20 @@
         },
         methods: {
             updateField(field, e) {
-                console.log(field, e.target.value, this.templateEmail);
-                console.log((field !== 'email'), (this.templateEmail !== e.target.value), (field !== 'email') === (this.templateEmail !== e.target.value));
-                // if ( (field !== 'email') === (this.templateEmail !== e.target.value) ) {
-                //   console.log('Update fielda');
-                this.$store.commit("updateField", {
-                    fieldName: field,
-                    value: e.target.value
-                });
-                // }
-                if (field !== 'sex') this.$v[field].$touch();
-
+              this.$store.commit("updateField", {
+                fieldName: field,
+                value: e.target.value
+              });
+              if ( field !== 'sex' ) this.$v[field].$touch();
             },
             updateUserProfile() {
-                const formData = {
-                    name: this.name,
-                    sex: this.sex,
-                    email: this.email,
-                };
-                this.$store.dispatch("updateUserProfile", formData);
+              if (this.$v.name.$error || this.$v.email.$error) return;
+              const formData = {
+                  name: this.name,
+                  sex: this.sex,
+                  email: this.email,
+              };
+              this.$store.dispatch("updateUserProfile", formData);
             }
         }
     }
