@@ -6,23 +6,23 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
+  import {mapState} from 'vuex';
 
-    export default {
-        data() {
-            return {
-                female: require("../../assets/user-female.svg"),
-                male: require("../../assets/user-male.svg")
-            }
-        },
-        computed: mapState({
-            name: state => state.user.name,
-            sex: state => state.user.sex
-        })
-    };
+  export default {
+    data() {
+      return {
+        female: require("../../assets/user-female.svg"),
+        male: require("../../assets/user-male.svg")
+      }
+    },
+    computed: mapState({
+      name: state => state.user.name,
+      sex: state => state.user.sex
+    })
+  };
 </script>
 
-<style lang="scss">
+<style>
   .user {
     margin-right: auto;
 
@@ -30,16 +30,17 @@
     align-items: center;
     justify-content: center;
 
-    &__image {
-      width: 40px;
-      height: 40px;
-    }
+  }
 
-    &__name {
-      color: $light;
-      margin-bottom: 0;
-      margin-left: 10px;
-      font-weight: 500;
-    }
+  .user__image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user__name {
+    color: #fff;
+    margin-bottom: 0;
+    margin-left: 10px;
+    font-weight: 500;
   }
 </style>

@@ -8,7 +8,9 @@
     "lint": "vue-cli-service lint",
     "test": "vue-cli-service test:unit",
     "test:nocache": "vue-cli-service test:unit --no-cache",
-    "test:coverage": "vue-cli-service test:unit --coverage"
+    "test:coverage": "vue-cli-service test:unit --coverage",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@vue/cli": "^4.1.2",
@@ -20,8 +22,13 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.4",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
+    "@storybook/addon-actions": "^5.3.12",
+    "@storybook/addon-links": "^5.3.12",
+    "@storybook/addons": "^5.3.12",
+    "@storybook/vue": "^5.3.12",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.2",
     "@vue/cli-plugin-unit-jest": "^3.11.0",
@@ -31,6 +38,8 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-vue": "^2.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.13.0",
